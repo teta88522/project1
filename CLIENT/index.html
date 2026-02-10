@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="container">
+  <header>
+    <h1>PL SCOUTER</h1>
+  </header>  
+  <section class="ticker-container">
+  <ul class="teamlist">
+    <li class="team-item">
+      <img src="img/ars.png" alt="ars">
+      <span>아스날</span>
+    </li>
+    <li class="team-item">
+      <img src="img/mnc.png" alt="mnc">
+      <span>맨시티</span>
+    </li>
+    <li class="team-item">
+      <img src="img/asv.png" alt="asv">
+      <span>아스톤빌라</span>
+    </li>
+    <li class="team-item">
+      <img src="img/mnu.png" alt="mnu">
+      <span>맨유</span>
+    </li>
+
+    <li class="team-item">
+      <img src="img/ars.png" alt="ars">
+      <span>아스날</span>
+    </li>
+    <li class="team-item">
+      <img src="img/mnc.png" alt="mnc">
+      <span>맨시티</span>
+    </li>
+    <li class="team-item">
+      <img src="img/asv.png" alt="asv">
+      <span>아스톤빌라</span>
+    </li>
+    <li class="team-item">
+      <img src="img/mnu.png" alt="mnu">
+      <span>맨유</span>
+    </li>
+  </ul>
+</section>
+  <aside>
+  <div>
+    <table>
+      <thead>
+
+      <tr>
+        <th>NAME</th>
+        <td><input type="text" id="NAME" /></td>
+      </tr>
+      <tr>
+        <th>TEAM</th>
+        <td><input type="text" id="TEAM" /></td>
+      </tr>  
+      <tr>  
+        <th>POSITION</th>
+        <td><input type="text" id="POSITION" /></td>
+      </tr>  
+      <tr>
+        <th>GOALS</th>
+        <td><input type="text" id="GOALS" /></td>
+      </tr>  
+      <tr>  
+        <th>ASSIST</th>
+        <td><input type="text" id="ASSIST" /></td>
+      </tr>
+      <tr>
+        <td colspan="2" textalign="center">
+          <button onclick="insertPlayer()">등록</button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button>수정확인</button>
+        </td>
+        <td>
+          <button>수정취소</button>
+        </td>
+      </tr>
+      </thead>
+          <tr>
+            <th>ID</th>
+            <th>이름</th>
+            <th>팀</th>
+            <th>포지션</th>
+            <th>골</th>
+            <th>어시</th>
+            <th>삭제</th>
+            <th>수정</th>
+          </tr>
+          </tr>
+      <tbody></tbody>
+    </table>
+  </div>
+  </aside>
+  <footer>
+
+  </footer>
+  <script src="connect.js"></script>
+  <script>
+
+  </script>
+
+  <script>
+    fetch(`http://localhost:3000/player/1`)
+    .then((res) => res.json())
+    .then((data) => {
+      data.forEach((elem) => {
+        console.log(elem)
+        const tr = makeRow(elem);
+document.querySelector("tbody").appendChild(tr);
+      });
+    });
+
+    function insertPlayer(){
+      fetch(`http://localhost:3000/player_insert`,{
+        method:"post",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+        NAME : document.querySelector('#NAME').value,
+        TEAM : document.querySelector('#TEAM').value,
+        POSITION : document.querySelector('#POSITION').value,
+        GOALS : document.querySelector('#GOALS').value,
+        ASSIST : document.querySelector('#ASSIST').value  
+        }),
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        if(data.retCode == 'OK'){
+          let tr = makeRow(data);
+          console.log(tr)
+          document.querySelector('tbody').appendChild(tr);
+        }
+        else{
+          alert('hi')
+        }
+      })
+      .catch((err) => console.log(err));
+    }
+
+    function changePlayers(){
+      fetch(`http://localhost:3000/player_update/`,{
+        method:"post",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+
+        })
+        }
+      )
+    }
+  </script>
+</div>
+</body>
+</html>
