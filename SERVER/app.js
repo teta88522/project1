@@ -6,6 +6,7 @@ const app = express() ; //express 객체를 생성 (서버 앱의 본체)
 const port = 3000; // 서버가 사용할 포트 번호(사용자가 들어오는 곳)
 
 const cors = require('cors'); //cors 영역 처리
+const { autoCommit } = require('oracledb');
 
 app.use(cors());//보안상 데이터를 주고받기 위해 걸리는거 허용
 
@@ -18,6 +19,7 @@ app.get("/",(req,res)=>{
   res.send(`<h2>welcome to server</h2>`);
 });
 
+// 가장 기본
 app.get("/player/1",async(req,res) => {
   const conn = await getConnection();
   const {metaData, rows} = await conn.execute(
@@ -29,6 +31,28 @@ app.get("/player/1",async(req,res) => {
   res.send(json);
 })
 
+// 선택한 팀 조회
+app.get("/select_team/:team", async(req,res) =>{
+  const conn = await getConnection();
+  const result = await conn.execute(
+    `select * 
+    from players
+    where team = :team`,
+    {team : req.params.team},
+    {autoCommit : true}
+  );
+  console.log(result)
+  if (result.rows.length > 0){
+    res.json({retCode:'OK',
+              rows : result.rows  
+    },
+     );
+  }
+  else{
+    res.json({retCode: "NG"});
+  }
+
+})
 
 // html에서 db로 데이터 전송하기!
 app.post("/player_insert", async(req,res) => {
@@ -133,6 +157,9 @@ app.post('/player_update/:ID',async(req,res) =>{
     res.json({ retCode: "NG" });
   }
 })
+
+
+
 
 
 // 글삭제.
