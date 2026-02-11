@@ -45,11 +45,11 @@ app.post("/player_insert", async(req,res) => {
     :ASSIST)
     returning ID into :INO`,
     { INO : {dir: oracledb.BIND_OUT, type: oracledb.NUMBER}, //이게 뭔 코드일까
-      NAME : req.body.NAME,
-      TEAM : req.body,TEAM,
-      POSITION:req.body.POSITION,
-      GOALS:req.body.GOALS,
-      ASSIST:req.body.ASSIST
+      NAME : NAME,
+      TEAM : TEAM,
+      POSITION:POSITION,
+      GOALS:GOALS,
+      ASSIST:ASSIST
   },
   {autoCommit:true},
   );
@@ -70,7 +70,71 @@ app.post("/player_insert", async(req,res) => {
   }
 });
 
-// 삭제
+// 수정할 선수 값 받아오기
+app.get("/select_player/:INO",async (req,res) => {
+  const conn = await getConnection();
+
+  const result = await conn.execute(
+    `SELECT * FROM players WHERE ID = :INO`,
+    {INO : req.params.INO},
+  );
+    if (result.rows.length > 0) {
+      const player = result.rows[0];
+  
+    res.json({ retCode: "OK",
+      NAME:player.NAME,
+      TEAM : player.TEAM,
+      POSITION : player.POSITION,
+      GOALS : player.GOALS,
+      ASSIST : player.ASSIST
+
+
+     }); // { "retCode": "OK" }
+  } else {
+    res.json({ retCode: "NG" });
+  }
+})
+
+//수정
+app.post('/player_update/:ID',async(req,res) =>{
+  console.log(req.params); 
+  const {NAME,TEAM,POSITION,GOALS,ASSIST} = req.body
+  const conn = await getConnection();
+  const result = await conn.execute(
+    `update players
+      set NAME = :NAME
+        ,TEAM = :TEAM
+          ,POSITION = :POSITION
+            ,GOALS = :GOALS
+              ,ASSIST = :ASSIST
+                WHERE ID = :ID`,
+              {ID : req.params.ID,
+                NAME : NAME,
+                TEAM : TEAM,
+                POSITION : POSITION,
+                GOALS : GOALS,
+                ASSIST : ASSIST
+              },
+              {autoCommit:true},
+  );
+  console.log(req.params.ID)
+  if (result.rowsAffected) {
+    res.json({ retCode: "OK" ,
+      ID : req.params.ID,
+      NAME : NAME,
+      TEAM : TEAM,
+      POSITION : POSITION,
+      GOALS : GOALS,
+      ASSIST : ASSIST      
+    }
+
+    ); // { "retCode": "OK" }
+  } else {
+    res.json({ retCode: "NG" });
+  }
+})
+
+
 // 글삭제.
 app.get("/player_delete/:INO", async (req, res) => {
   console.log(req.params.INO); // req.params 속성.
@@ -88,42 +152,6 @@ app.get("/player_delete/:INO", async (req, res) => {
   }
 });
 
-//수정
-app.get('/player_update/:ID/:NAME/:TEAM/:POSITION/:GOALS/:ASSIST',async(req,res) =>{
-  console.log(req.params); 
-  const conn = await getConnection();
-  const result = await conn.execute(
-    `update players
-      set NAME = :NAME
-        ,TEAM = :TEAM
-          ,GOALS = :GOALS
-            ,ASSIST = "ASSIST
-              WHERE ID = :ID`,
-              {
-                ID : req.params.ID,
-                NAME : req.params.NAME
-              ,TEAM : req.params.TEAM
-              ,GOALS : req.params.GOALS
-            ,ASSIST : req.params.ASSIST
-                
-              },
-              {autoCommit:true},
-  );
-  console.log(req.params.ID)
-  if (result.rowsAffected) {
-    res.json({ retCode: "OK" ,
-      ID : req.params.ID,
-      NAME : NAME,
-      TEAM : TEAM,
-      GOALS : GOALS,
-      ASSIST : ASSIST      
-    }
-
-    ); // { "retCode": "OK" }
-  } else {
-    res.json({ retCode: "NG" });
-  }
-})
 
 
 // 서버 실행: 설정한 포트(3000)에서 대기 시작

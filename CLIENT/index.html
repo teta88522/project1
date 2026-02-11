@@ -50,9 +50,8 @@
 </section>
   <aside>
   <div>
-    <table>
+    <table id="select_table">
       <thead>
-
       <tr>
         <th>NAME</th>
         <td><input type="text" id="NAME" /></td>
@@ -76,14 +75,7 @@
       <tr>
         <td colspan="2" textalign="center">
           <button onclick="insertPlayer()">등록</button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button>수정확인</button>
-        </td>
-        <td>
-          <button>수정취소</button>
+          <button class="modal-open">수정</button>
         </td>
       </tr>
       </thead>
@@ -100,8 +92,42 @@
           </tr>
       <tbody></tbody>
     </table>
-  </div>
   </aside>
+  <!-- 수정창 만들기  -->
+  <div class="modal">
+    <div class="modal_body">
+    <h2>수정창</h2>
+    <table id="alt_table">
+      <tr>
+        <th>ID</th>
+        <td><input type="text" id="alt_id" /></td>
+      </tr>
+      <tr>
+        <th>NAME</th>
+        <td><input type="text" id="alt_name" /></td>
+      </tr>
+      <tr>
+        <th>TEAM</th>
+        <td><input type="text" id="alt_team" /></td>
+      </tr>  
+      <tr>  
+        <th>POSITION</th>
+        <td><input type="text" id="alt_position" /></td>
+      </tr>  
+      <tr>
+        <th>GOALS</th>
+        <td><input type="text" id="alt_goals" /></td>
+      </tr>  
+      <tr>  
+        <th>ASSIST</th>
+        <td><input type="text" id="alt_assist" /></td>
+      </tr>
+      </table>
+      <button id="up">확인</button>
+      <button id="down">취소</button>
+      </div>
+  </div>
+  </div>
   <footer>
 
   </footer>
@@ -120,6 +146,8 @@
 document.querySelector("tbody").appendChild(tr);
       });
     });
+
+
 
     function insertPlayer(){
       fetch(`http://localhost:3000/player_insert`,{
@@ -147,18 +175,7 @@ document.querySelector("tbody").appendChild(tr);
       })
       .catch((err) => console.log(err));
     }
-
-    function changePlayers(){
-      fetch(`http://localhost:3000/player_update/`,{
-        method:"post",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-
-        })
-        }
-      )
-    }
-  </script>
+</script>
 </div>
 </body>
 </html>
