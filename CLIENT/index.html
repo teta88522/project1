@@ -14,85 +14,100 @@
   <section class="ticker-container">
   <ul class="teamlist">
     <li class="team-item">
-      <img src="img/ars.png" alt="ars">
+      <img src="img/ars.png" alt="ars" id="아스날" onclick="select_team(this.id)">
       <span>아스날</span>
     </li>
     <li class="team-item">
-      <img src="img/mnc.png" alt="mnc">
+      <img src="img/mnc.png" alt="mnc" id="맨시티" onclick="select_team(this.id)">
       <span>맨시티</span>
     </li>
     <li class="team-item">
-      <img src="img/asv.png" alt="asv">
+      <img src="img/asv.png" alt="asv" id="아스톤빌라" onclick="select_team(this.id)">
       <span>아스톤빌라</span>
     </li>
     <li class="team-item">
-      <img src="img/mnu.png" alt="mnu">
+      <img src="img/mnu.png" alt="mnu" id="맨유" onclick="select_team(this.id)">
       <span>맨유</span>
     </li>
 
     <li class="team-item">
-      <img src="img/ars.png" alt="ars">
-      <span>아스날</span>
+      <img src="img/첼시.png" alt="che" id="첼시" onclick="select_team(this.id)">
+      <span>첼시</span>
     </li>
     <li class="team-item">
-      <img src="img/mnc.png" alt="mnc">
-      <span>맨시티</span>
+      <img src="img/리버풀.png" alt="liv" id="리버풀" onclick="select_team(this.id)">
+      <span>리버풀</span>
     </li>
     <li class="team-item">
-      <img src="img/asv.png" alt="asv">
-      <span>아스톤빌라</span>
+      <img src="img/뉴캐슬.png" alt="new" id="뉴캐슬" onclick="select_team(this.id)">
+      <span>뉴캐슬</span>
     </li>
     <li class="team-item">
-      <img src="img/mnu.png" alt="mnu">
-      <span>맨유</span>
+      <img src="img/토트넘.png" alt="tot" id="토트넘" onclick="select_team(this.id)">
+      <span>토트넘</span>
     </li>
   </ul>
 </section>
-  <aside>
-  <div>
-    <table id="select_table">
+<aside>
+  <h3>Player Info</h3>
+
+  <div class="form-wrapper">
+    
+    <table id="input_table">
       <thead>
-      <tr>
-        <th>NAME</th>
-        <td><input type="text" id="NAME" /></td>
-      </tr>
-      <tr>
-        <th>TEAM</th>
-        <td><input type="text" id="TEAM" /></td>
-      </tr>  
-      <tr>  
-        <th>POSITION</th>
-        <td><input type="text" id="POSITION" /></td>
-      </tr>  
-      <tr>
-        <th>GOALS</th>
-        <td><input type="text" id="GOALS" /></td>
-      </tr>  
-      <tr>  
-        <th>ASSIST</th>
-        <td><input type="text" id="ASSIST" /></td>
-      </tr>
-      <tr>
-        <td colspan="2" textalign="center">
-          <button onclick="insertPlayer()">등록</button>
-          <button class="modal-open">수정</button>
-        </td>
-      </tr>
+        <tr>
+          <th>NAME</th>
+          <td><input type="text" id="NAME" /></td>
+        </tr>
+        <tr>
+          <th>TEAM</th>
+          <td><input type="text" id="TEAM" /></td>
+        </tr>
+        <tr>
+          <th>POSITION</th>
+          <td><input type="text" id="POSITION" /></td>
+        </tr>
+        <tr>
+          <th>GOALS</th>
+          <td><input type="text" id="GOALS" /></td>
+        </tr>
+        <tr>
+          <th>ASSIST</th>
+          <td><input type="text" id="ASSIST" /></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="border: none; text-align: center; padding-top: 15px;">
+            <button onclick="insertPlayer()" id="actionBtn">등록</button>
+          </td>
+        </tr>
       </thead>
-          <tr>
-            <th>ID</th>
-            <th>이름</th>
-            <th>팀</th>
-            <th>포지션</th>
-            <th>골</th>
-            <th>어시</th>
-            <th>삭제</th>
-            <th>수정</th>
-          </tr>
-          </tr>
-      <tbody></tbody>
     </table>
-  </aside>
+
+    <div class="image-box">
+      <img src="img/리그.png" alt="ars" id="photo">
+    </div>
+
+  </div>
+  <hr style="margin: 30px 0; border: 0; border-top: 1px solid #ddd;">
+
+  <table id="list_table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>이름</th>
+        <th>팀</th>
+        <th>포지션</th>
+        <th>골</th>
+        <th>어시</th>
+        <th>삭제</th>
+        <th>수정</th>
+      </tr>
+    </thead>
+    <tbody id="player_List">
+      </tbody>
+  </table>
+
+</aside>
   <!-- 수정창 만들기  -->
   <div class="modal">
     <div class="modal_body">
@@ -129,53 +144,8 @@
   </div>
   </div>
   <footer>
-
   </footer>
   <script src="connect.js"></script>
-  <script>
-
-  </script>
-
-  <script>
-    fetch(`http://localhost:3000/player/1`)
-    .then((res) => res.json())
-    .then((data) => {
-      data.forEach((elem) => {
-        console.log(elem)
-        const tr = makeRow(elem);
-document.querySelector("tbody").appendChild(tr);
-      });
-    });
-
-
-
-    function insertPlayer(){
-      fetch(`http://localhost:3000/player_insert`,{
-        method:"post",
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-        NAME : document.querySelector('#NAME').value,
-        TEAM : document.querySelector('#TEAM').value,
-        POSITION : document.querySelector('#POSITION').value,
-        GOALS : document.querySelector('#GOALS').value,
-        ASSIST : document.querySelector('#ASSIST').value  
-        }),
-      })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        if(data.retCode == 'OK'){
-          let tr = makeRow(data);
-          console.log(tr)
-          document.querySelector('tbody').appendChild(tr);
-        }
-        else{
-          alert('hi')
-        }
-      })
-      .catch((err) => console.log(err));
-    }
-</script>
 </div>
 </body>
 </html>

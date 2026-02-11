@@ -1,27 +1,31 @@
-/* 1. 기본 설정 및 폰트 */
+/* =========================================
+    1. 기본 설정 (Body & Container)
+   ========================================= */
 body {
   margin: 0;
   padding: 0;
-  background-color: #f4f4f9; /* 배경: 아주 연한 회색 (눈 편안함) */
-  font-family: 'Noto Sans KR', sans-serif; /* 폰트 권장 */
+  background-color: #f4f4f9;
+  font-family: 'Noto Sans KR', sans-serif;
   color: #333;
 }
 
-/* 2. 메인 컨테이너: 카드 스타일로 변경 */
 #container {
   width: 1000px;
-  margin: 40px auto; /* 위아래 여백 추가 */
-  background-color: white; /* 흰색 배경 */
-  border-radius: 15px; /* 모서리 둥글게 */
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* 그림자 효과로 입체감 */
-  overflow: hidden; /* 자식 요소가 튀어나오지 않게 */
+  margin: 40px auto;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  overflow: hidden;
   padding-bottom: 40px;
 }
 
+/* =========================================
+   2. 헤더 & 타이틀
+   ========================================= */
 header {
   padding: 20px 0;
-  background-color: #38003c; /* PL 공식 보라색 */
-  color: #00ff85; /* PL 공식 형광 민트색 */
+  background-color: #38003c;
+  color: #00ff85;
   text-align: center;
   margin-bottom: 0;
 }
@@ -32,13 +36,27 @@ header h1 {
   letter-spacing: 2px;
 }
 
-/* 3. 롤링 배너 (기존 코드 유지 및 디자인 통합) */
+aside {
+  padding: 0 40px;
+}
+
+h3 {
+  border-left: 5px solid #38003c;
+  padding-left: 10px;
+  margin-bottom: 20px;
+  margin-top: 40px;
+  color: #38003c;
+}
+
+/* =========================================
+   3. 롤링 배너 (Ticker)
+   ========================================= */
 .ticker-container {
   width: 100%;
   overflow: hidden;
-  background-color: #222; /* 어두운 배경 유지 */
+  background-color: #222;
   padding: 20px 0;
-  border-bottom: 4px solid #00ff85; /* 하단 포인트 라인 */
+  border-bottom: 4px solid #00ff85;
 }
 
 .teamlist {
@@ -47,10 +65,9 @@ header h1 {
   margin: 0;
   list-style: none;
   width: max-content;
-  animation: rolling 20s linear infinite; /* 속도 조절 */
+  animation: rolling 20s linear infinite;
 }
 
-/* 마우스 올리면 멈춤 효과 (편의상 추가) */
 .ticker-container:hover .teamlist {
   animation-play-state: paused;
 }
@@ -71,14 +88,14 @@ header h1 {
   height: 80px;
   object-fit: contain;
   margin-bottom: 10px;
-  opacity: 0.5; /* 평소엔 반투명 */
+  opacity: 0.5;
   transition: opacity 0.3s ease-in-out, transform 0.3s;
 }
 
 .team-item:hover img {
   opacity: 1;
   cursor: pointer;
-  transform: scale(1.1); /* 마우스 올리면 살짝 커짐 */
+  transform: scale(1.1);
 }
 
 @keyframes rolling {
@@ -86,68 +103,99 @@ header h1 {
   100% { transform: translateX(-50%); }
 }
 
-/* 4. 테이블 & 입력 폼 디자인 (가장 많이 바뀐 부분) */
-aside {
-  padding: 40px;
-}
-
-h3 {
-  border-left: 5px solid #38003c; /* 제목 옆에 보라색 바 */
-  padding-left: 10px;
-  margin-bottom: 20px;
-  margin-top: 40px;
-  color: #38003c;
-}
-
-#select_table {
+/* =========================================
+   4. 테이블 공통 스타일 (입력/리스트)
+   ========================================= */
+/* 입력 테이블(#input_table)과 리스트 테이블(#list_table) 공통 적용 */
+#input_table, #list_table {
   width: 100%;
-  border-collapse: collapse; /* 테두리 겹침 방지 */
+  border-collapse: collapse;
   margin: 0 auto;
   font-size: 14px;
+  table-layout: fixed; /* [핵심] 내용이 길어도 표가 절대 늘어나지 않음 */
 }
 
-/* 테이블 헤더 */
-#select_table th {
-  background-color: #38003c; /* 헤더 배경 보라색 */
+#input_table th, #list_table th {
+  background-color: #38003c;
   color: white;
-  padding: 12px;
   font-weight: 500;
   border: 1px solid #38003c;
+  width: 100px;
 }
 
-/* 테이블 내용 */
-#select_table td {
+#input_table td, #list_table td {
   padding: 10px;
-  border: 1px solid #ddd; /* 연한 회색 테두리 */
+  border: 1px solid #ddd;
   text-align: center;
 }
 
-/* 줄무늬 효과 (가독성 향상) */
-#select_table tbody tr:nth-child(even) {
+#list_table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-/* 마우스 올렸을 때 하이라이트 */
-#select_table tbody tr:hover {
+#list_table tbody tr:hover {
   background-color: #f0f0ff;
 }
 
-/* 5. 입력창(Input) 디자인 */
+/* =========================================
+   5. [NEW] 입력폼 & 이미지 배치 (Flex)
+   ========================================= */
+.form-wrapper {
+  display: flex;            /* 좌우 배치 핵심 */
+  justify-content: space-between;
+  align-items: flex-start;  /* 상단 기준 정렬 */
+  gap: 30px;                /* 사이 간격 */
+}
+
+/* 왼쪽: 입력 테이블 */
+#input_table {
+  flex: 1;          /* 남은 공간 차지 */
+  width: auto;      /* 강제 100% 해제 */
+}
+
+/* 오른쪽: 이미지 박스 */
+.image-box {
+  width: 250px;        /* 너비 고정 */
+  height: 300px;       /* [핵심] 높이도 고정해야 꽉 채울 수 있음 */
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;    /* 이미지가 넘치면 자름 */
+  background-color: #f0f0f0; /* 이미지가 없을 때 보일 배경색 */
+  border-radius: 10px;
+}
+
+#photo {
+  width: 100%;         /* 너비 꽉 채움 */
+  height: 100%;        /* 높이 꽉 채움 */
+  
+  /* [핵심] 비율 유지하면서 꽉 채우기 (잘리는 부분 발생 가능) */
+  object-fit: cover;   
+  
+  /* (선택) 사람 사진일 경우 얼굴이 잘리지 않게 '위쪽'을 기준으로 정렬 */
+  object-position: top center; 
+  
+  border-radius: 10px;
+}
+
+/* =========================================
+   6. 입력창(Input) & 버튼
+   ========================================= */
 input[type="text"] {
   width: 90%;
   padding: 8px 10px;
   border: 1px solid #ccc;
-  border-radius: 4px; /* 모서리 살짝 둥글게 */
+  border-radius: 4px;
   outline: none;
   transition: border-color 0.3s;
 }
 
 input[type="text"]:focus {
-  border-color: #38003c; /* 포커스 되면 보라색 테두리 */
+  border-color: #38003c;
   box-shadow: 0 0 5px rgba(56, 0, 60, 0.2);
 }
 
-/* 6. 버튼 디자인 */
 button {
   background-color: #38003c;
   color: white;
@@ -161,24 +209,13 @@ button {
 }
 
 button:hover {
-  background-color: #5a0060; /* 호버 시 조금 더 밝은 보라 */
+  background-color: #5a0060;
 }
 
-/* 수정/삭제 버튼 구분 (선택 사항) */
-button:nth-child(1) { /* 수정 버튼 등 */
-  background-color: #2196F3; /* 파란색 */
-}
-button:nth-child(1):hover { background-color: #0b7dda; }
-
-button:nth-child(2) { /* 삭제 버튼 등 */
-  background-color: #ff4d4d; /* 빨간색 */
-}
-button:nth-child(2):hover { background-color: #cc0000; }
-
-/* 등록 완료/수정 완료 메인 버튼 */
+/* 등록 버튼 (기존 유지) */
 #actionBtn {
-  background-color: #00ff85 !important; /* 형광 민트 */
-  color: #38003c !important; /* 글자는 보라색 */
+  background-color: #00ff85 !important;
+  color: #38003c !important;
   width: 100%;
   padding: 12px;
   font-size: 16px;
@@ -187,33 +224,35 @@ button:nth-child(2):hover { background-color: #cc0000; }
   background-color: #00cc6a !important;
 }
 
-/* 모달창 만들기 (수정) */
-.modal{
+/* 수정/삭제 버튼 색상 */
+#red button:nth-child(1) { background-color: #2196F3; } /* 수정 */
+#red button:nth-child(1):hover { background-color: #0b7dda; }
+
+#blue button:nth-child(1) { background-color: #ff4d4d; } /* 삭제 */
+#blue button:nth-child(1):hover { background-color: #cc0000; }
+
+/* =========================================
+   7. 모달창
+   ========================================= */
+.modal {
   position: absolute;
   display: none;
-
-
   justify-content: center;
-  top:0;
-  left: 0;
-
-  width: 100%;
-  height: 200%;
-
-
+  top: 0; left: 0;
+  width: 100%; height: 200%;
   background-color: rgba(0,0,0,0.4);
 }
 
-.modal_body{
+.modal_body {
   position: absolute;
   top: 30%;
-  width: 300px;
-  height: 300px;
+  width: 300px; height: 300px;
   padding: 40px;
   text-align: center;
   background-color: rgb(255,255,255);
-  border-radius:10px;  
-  box-shadow:0 2px 3px 0 rgba(34,36,38,0.15);
-transform:translateY(-50%); 
-
+  border-radius: 10px;
+  box-shadow: 0 2px 3px 0 rgba(34,36,38,0.15);
+  transform: translateY(-50%);
 }
+
+
