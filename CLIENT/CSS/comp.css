@@ -1,0 +1,139 @@
+/* 초기화 */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body {
+    background-color: #121212;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* 1. 전체 래퍼 사이즈 증가 (900px -> 1400px) */
+.wrapper { 
+    width: 100%; 
+    max-width: 1400px; /* 여기서 전체 가로폭 결정 */
+    padding: 30px; 
+}
+
+header { text-align: center; margin-bottom: 40px; }
+header h1 { font-size: 3rem; font-weight: 800; letter-spacing: 2px; } /* 제목도 키움 */
+header span { color: #00ff85; }
+
+/* 2. 카드 박스 여백 증가 */
+.card {
+    background: #202020;
+    border-radius: 24px; /* 둥근 모서리도 조금 더 크게 */
+    padding: 60px 40px; /* 내부 여백 대폭 증가 */
+    box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #333;
+}
+
+/* 선수 영역 */
+.player {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 3. 선수 이미지 크기 1.7배 증가 (120px -> 200px) */
+.profile-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 6px solid #38003c; /* 테두리도 4px -> 6px로 두껍게 */
+    background: #fff;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.profile-img img { width: 100%; height: 100%; object-fit: cover; }
+
+/* 4. 폰트 사이즈 대폭 확대 */
+.name { 
+    font-size: 2rem; /* 이름 폰트 키움 */
+    margin-bottom: 10px; 
+    font-weight: 800; 
+}
+.team { 
+    color: #aaa; 
+    font-size: 1.2rem; /* 팀명 폰트 키움 */
+    margin-bottom: 15px;
+}
+
+/* 중앙 스탯 그래프 영역 */
+.stats-zone {
+    flex: 2; 
+    padding: 0 40px; /* 간격 넓힘 */
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px; /* 줄 간격 25px -> 40px로 시원하게 */
+}
+
+/* 5. 중앙 라벨(GOALS/ASSIST) 크기 증가 */
+.label {
+    width: 120px; /* 라벨 박스 넓힘 */
+    text-align: center;
+    font-size: 1.2rem; /* 글자 키움 */
+    font-weight: 800;
+    color: #bbb;
+    background: #2a2a2a;
+    padding: 10px 0;
+    border-radius: 8px;
+    z-index: 2;
+    letter-spacing: 1px;
+}
+
+/* 6. 점수 숫자 크기 증가 */
+.score {
+    width: 60px;
+    font-weight: 900;
+    font-size: 2.2rem; /* 숫자 아주 크게 */
+    text-align: center;
+}
+
+.score.left-score { margin-right: 15px; }
+.score.right-score { margin-left: 15px; }
+
+/* 7. 그래프 바 두께 증가 */
+.bar-area {
+    flex: 1;
+    height: 24px; /* 바 두께 12px -> 24px로 두껍게 */
+    background: #333;
+    border-radius: 12px;
+    margin: 0 15px;
+    display: flex;
+    overflow: hidden;
+}
+
+.bar-area.left { justify-content: flex-end; direction: ltr; }
+.bar-area.right { justify-content: flex-start; }
+
+.bar {
+    height: 100%;
+    background: #00ff85;
+    border-radius: 12px;
+}
+
+.bar.loser { background: #444; }
+
+/* 반응형: 모바일에서는 세로로 변경 (크기 유지하되 배치만 변경) */
+@media (max-width: 1024px) { /* 태블릿 사이즈부터 세로로 변경 */
+    .card { flex-direction: column; gap: 50px; padding: 40px 20px; }
+    .stats-zone { width: 100%; margin-top: 30px; }
+    
+    /* 모바일에서도 이미지가 너무 크면 부담스러우니 약간 줄임 */
+    .profile-img { width: 150px; height: 150px; }
+    .name { font-size: 1.5rem; }
+    .score { font-size: 1.8rem; }
+}

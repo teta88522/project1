@@ -1,0 +1,107 @@
+/* 1. 기본 설정 (폰트 및 리셋) */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      /* 프리미어리그 메인 컬러: 딥 퍼플 */
+      background-color: #38003c; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    /* 2. 로그인 카드 (중앙 박스) */
+    .login-container {
+      background-color: #ffffff;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* 입체감 */
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      border-top: 5px solid #00ff85; /* 상단 형광 초록 포인트 */
+    }
+
+    /* 3. 제목 스타일 */
+    h2 {
+      color: #38003c;
+      margin-bottom: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    /* 4. 입력창 그룹 */
+    .input-group {
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #38003c;
+      font-size: 0.9rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    /* 입력창 클릭 시 형광 초록 테두리 */
+    input:focus {
+      outline: none;
+      border-color: #00ff85;
+      box-shadow: 0 0 8px rgba(0, 255, 133, 0.3);
+    }
+
+    /* 5. 버튼 그룹 */
+    .button-group {
+      display: flex;
+      gap: 10px; /* 버튼 사이 간격 */
+      margin-top: 1.5rem;
+    }
+
+    button {
+      flex: 1; /* 버튼 너비 균등 분할 */
+      padding: 0.8rem;
+      border: none;
+      border-radius: 50px; /* 둥근 버튼 */
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s, filter 0.2s;
+    }
+
+    /* 메인 버튼 (로그인/가입) - 형광 초록 배경 + 보라 글씨 */
+    .btn-primary {
+      background-color: #00ff85;
+      color: #38003c;
+    }
+
+    /* 서브 버튼 - 보라 배경 + 흰 글씨 */
+    .btn-secondary {
+      background-color: #38003c;
+      color: #ffffff;
+    }
+
+    /* 버튼 호버 효과 */
+    button:hover {
+      filter: brightness(0.9);
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }

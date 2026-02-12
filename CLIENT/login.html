@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./CSS/login.css">
+</head>
+  <title>로그인</title>
+<body>
+<div class="login-container">
+    <form action="">
+      <h2>MEMBER ACCESS</h2>
+      
+      <div class="input-group">
+        <label for="login_name">Username</label>
+        <input type="text" name="username" id="login_name" placeholder="이름을 입력하세요">
+      </div>
+
+      <div class="input-group">
+        <label for="login_id">ID</label>
+        <input type="text" name="id" id="login_id" placeholder="아이디를 입력하세요">
+      </div>
+
+      <div class="input-group">
+        <label for="login_pw">Password</label>
+        <input type="password" name="password" id="login_pw" placeholder="비밀번호를 입력하세요">
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="btn-secondary" onclick="login()">Sign in</button>
+        <button type="button" class="btn-primary" onclick="create_id()">Sign up</button>
+      </div>
+    </form>
+  </div>
+  <script src="login.js"></script>
+</body>
+</html>

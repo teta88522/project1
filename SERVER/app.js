@@ -1,5 +1,5 @@
 const express = require('express');                 // Express를 사용하여 브라우저에서 접속 할 수 있는 문 만들기
-
+const session = require('express-session')
 const {getConnection,oracledb}  = require('./db')   // 메인 파일 상단에서 require를 사용해 DB 파일을 변수에 담으세요.
 const app = express() ;                             //express 객체를 생성 (서버 앱의 본체)
 const port = 3000;                                  // 서버가 사용할 포트 번호(사용자가 들어오는 곳)
@@ -11,24 +11,38 @@ app.use(cors());                                    //보안상 데이터를 주
 
 app.use(express.json());                            // 미들웨어 설정: 클라이언트가 보낸 JSON 형식의 데이터를 서버가 읽을 수 있게 변환해줌
 
+app.use(session({                                   //세션 장착(서버가 기억력을 가짐)
+  secret : 'mySecretKey',
+  resave : false,
+  saveUninitialized:true
+}))
 
 //--------------------------------------------------------------------------------------------------// 여기 까지 모듈 환경설정
 
 // 라우팅: 사용자가 브라우저 주소창에 '/' (메인 주소)를 입력하고 들어왔을 때 실행할 일
 
 // 시작 화면 
-app.get("/player/1",async(req,res) => {
+app.get("/player/:page", async (req, res) => {
+  const page = req.params.page;
   const conn = await getConnection();
-  const {metaData, rows} = await conn.execute(
+  const { metaData, rows } = await conn.execute(
     `select *
-    from players
-    ORDER BY 1`,
+from players
+order by ID
+offset (:page -1) * 10 rows fetch next 10 rows only`,
+{page}
   );
+  const countResult = await conn.execute(
+    'select COUNT(*) AS CNT FROM PLAYERS'
+  )
 
-  const json = JSON.stringify(rows);
-  res.send(json);
-  }
-)
+  const totalCount = countResult.rows[0].CNT
+  console.log(totalCount)
+  res.json({
+    rows : rows,
+    total: totalCount
+  });
+});
 
 // 선수 생성하기
 app.post("/player_insert", async(req,res) => {
@@ -101,7 +115,7 @@ app.get("/select_team/:team", async(req,res) =>{
     {team : req.params.team},
     {autoCommit : true}
   );
-  console.log(result)
+  // console.log(result)
   if (result.rows.length > 0){
     res.json({retCode:'OK',
               rows : result.rows  
@@ -189,4 +203,80 @@ app.listen(port, () => {
   console.log('server 실행됨') 
 }
 );
+
+
+// ------------------------------------------ 로그인 창 만들기 
+app.post('/login',async(req,res) => {
+  const{ID,PW} = req.body;
+  const conn  = await getConnection();
+  const result = await conn.execute(
+    `SELECT * FROM members WHERE ID = :id AND pw = :pw`,
+      {iD : ID,pw:PW},
+      {autoCommit:true}
+    );
+    if (result.rows.length > 0){
+      console.log(ID,PW)
+      // 세션에 기록
+      req.session.isLogined = true;
+      req.session.userName = result.rows[0][0]; // 이름 저장
+      req.session.save(() => {                  // 세션 저장후 응답
+        res.json({retCode : 'OK', msg: '로그인 성공'});
+      });
+    }
+    else {
+      console.log(ID,PW)
+      res.json({retCode : 'fail', msg: '아이디 혹은 비밀번호 틀림'});
+
+    }
+  }
+)
+
+
+// 회원가입
+app.post('/create_id', async(req,res) => {
+  const {NAME,ID,PW} = req.body;
+  console.log(NAME,ID,PW)
+  const conn = await getConnection();
+  const result = await conn.execute(
+    `INSERT INTO members values(:un,:id,:pw)`,
+    {un : NAME, id : ID , pw : PW},
+    {autoCommit:true}
+  );
+  if(result.rowsAffected){
+    res.json({retCode : true});
+  }
+  else{
+    res.json({retCode : fail ,msg:'중복된 닉네임 이거나 아이디 입니다'})
+    }
+  }
+)
+
+// ------------------------------------------------------------------------ 선수 비교 창 만들기
+app.get('/compare_list',async(req,res) => {          // 드롭 다운 용 선수 이름 가져오기
+  const conn = await getConnection()
+  const result = await conn.execute(
+    `SELECT NAME FROM PLAYERS ORDER BY NAME ASC`
+  )
+  res.json({retCode:'OK',data:result.rows})
+  }
+)
+
+// 선수 데이타 가져오기
+app.get('/compare/data',async(req,res) =>{
+  const {p1,p2} = req.query;
+  const conn = await getConnection();
+  const result = await conn.execute(
+    `SELECT P.NAME, P.TEAM, P.GOALS, P.ASSIST, t.STADIUM
+    FROM players p LEFT join team t ON p.team = t.name
+    WHERE p.name = :p1 OR p.name = :p2`,
+    {p1 : p1, p2 : p2 }
+  )
+  if(result.rows.length > 0){
+    res.json({retCode : 'OK', data : result.rows})
+  }
+  else{
+    res.json({retCode:'NG', msg : '선수를 찾을수 없습니다'})
+    }
+  }
+)
 
